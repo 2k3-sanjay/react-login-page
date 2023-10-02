@@ -1,14 +1,32 @@
 import React, { useEffect, useState } from 'react'
-import Signinmodel from './Model/signinmodel';
+import Signinmodel from './Model/Signinmodel';
+import { useRouter } from 'next/router';
 
 function LoginPage() {
 
-
   const[userDetails,setUserDetails]=useState([])
+  const [password,setPassword]=useState("")
+  const[email,setEmail]=useState("")
+  const[errorMessage,setErrorMessage]=useState("")
+  const router=useRouter()
+
 useEffect(()=>{
   setUserDetails(JSON.parse(localStorage.getItem("userDetails")))
 },[])
-console.log("sdfsdf",userDetails)
+
+const verifyUserDetails=()=>{
+  console.log("sdfsdf",email==userDetails.email||password==userDetails.password,password,email)
+  if(userDetails!==null||userDetails!==undefined){
+    if(email===userDetails.email||password===userDetails.password){
+      router.push('/home')
+    }else{
+      setErrorMessage('please enter valid user details')
+    }
+  }else{
+    setErrorMessage('please Add  user details')
+  }
+
+}
 
   return (
     <>
@@ -20,16 +38,17 @@ console.log("sdfsdf",userDetails)
           class="img-fluid" alt="Phone image"/>
       </div>
       <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
+        <h5  className='text-danger' >{errorMessage}</h5>
         <form>
       
           <div class="form-outline mb-4">
-            <input type="email" id="form1Example13" class="form-control form-control-lg" placeholder='Enter your Email Address'/>
+            <input type="email" id="form1Example13"  value={email} onChange={(e)=>setEmail(e.target.value)} class="form-control form-control-lg" placeholder='Enter your Email Address'/>
             <label class="form-label" for="form1Example13" >Email address</label>
           </div>
 
        
           <div class="form-outline mb-4">
-            <input type="password" id="form1Example23" class="form-control form-control-lg"  placeholder='Enter your  Password'/>
+            <input type="password" id="form1Example23" class="form-control form-control-lg"  value={password} onChange={(e)=>setPassword(e.target.value)}  placeholder='Enter your  Password'/>
             <label class="form-label" for="form1Example23">Password</label>
           </div>
 
@@ -43,7 +62,7 @@ console.log("sdfsdf",userDetails)
           </div>
 
           <div class="d-grid gap-2">
-          <button class="btn btn-primary" type="button">Sign In</button>
+          <button class="btn btn-primary" type="button" onClick={(e)=>verifyUserDetails(e)}>Sign In</button>
           </div>
 
           <div class="divider d-flex align-items-center my-4">
@@ -59,7 +78,7 @@ console.log("sdfsdf",userDetails)
     </div>
   </div>
 </section>
-<Signinmodel userDetails={userDetails}/>
+<Signinmodel userDetails={userDetails} setUserDetails={setUserDetails}/>
 
     </>
   )
