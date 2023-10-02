@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 
-function signinmodel({userDetails}) {
+function signinmodel({userDetails,setUserDetails}) {
     const [password,setPassword]=useState("")
     const[email,setEmail]=useState("")
     const[userName,setUserName]=useState("")
+    const [errorMessage,setErrorMessage]=useState("")
   
     console.log("sdafafadf",userDetails)
  
@@ -15,8 +16,11 @@ function signinmodel({userDetails}) {
                 userName:userName
             }
             localStorage.setItem( "userDetails", JSON.stringify(obj) )
+            setUserDetails(obj)
             $('#exampleModal').modal('hide');
 
+        }else{
+          setErrorMessage("Please Add User Details")
         }
 
     }
@@ -26,10 +30,11 @@ function signinmodel({userDetails}) {
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Sign Up</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
+        <h6 className='text-danger'>{errorMessage}</h6>
       <form>
     <div class="mb-3">
     <label for="username" class="form-label" >User Name</label>
